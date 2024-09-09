@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <string.h>
 
+// NOTE: check special cases like blank spaces etc
+
 struct TrieNode {
   struct TrieNode *child[26];
   bool is_end_of_word;
@@ -152,16 +154,14 @@ int main(int argc, char *argv[]) {
           return 0;
         }
       }
-    }
 
-    // check if not used consecutively
-    for (int i = 1; i < n; i++) {
-      // printf("%c %c\n", solution_line[i], solution_line[i - 1]);
-
-      if (position_map[solution_line[i] - 'a'] ==
-          position_map[solution_line[i - 1] - 'a']) {
-        printf("Same-side letter used consecutively\n");
-        return 0;
+      // check if not used consecutively
+      if (i > 0) {
+        if (position_map[solution_line[i] - 'a'] ==
+            position_map[solution_line[i - 1] - 'a']) {
+          printf("Same-side letter used consecutively\n");
+          return 0;
+        }
       }
     }
 
