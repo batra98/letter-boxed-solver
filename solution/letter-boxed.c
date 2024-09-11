@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 
-// NOTE: check special cases like blank spaces etc
+// NOTE: check special cases like blank spaces etc. Update: Not required.
 
 struct TrieNode {
   struct TrieNode *child[26];
@@ -56,6 +56,19 @@ bool search(struct TrieNode *root, char word[]) {
     return false;
 }
 
+bool did_we_win(int *position_map, bool *is_char_used) {
+  for (int i = 0; i < 26; i++) {
+    if (position_map[i] == -1)
+      continue;
+
+    if (is_char_used[i] == false) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
 int main(int argc, char *argv[]) {
 
   /* wrong number of arguments */
@@ -63,7 +76,7 @@ int main(int argc, char *argv[]) {
     return 1;
 
   /* Open the board file */
-  // NOTE: will board will always argument 1?
+  // NOTE: will board will always argument 1?. Update: Yes
   FILE *fp = fopen(argv[1], "r");
 
   if (!fp) {
@@ -104,12 +117,6 @@ int main(int argc, char *argv[]) {
     printf("Invalid board\n");
     return 1;
   }
-  /*
-    for (int i = 0; i < 26; i++) {
-      printf("%c %d\n", (char)(i + 'a'), position_map[i]);
-    }
-    printf("\n");
-  */
 
   FILE *fp2 = fopen(argv[2], "r");
   if (!fp2) {
@@ -123,8 +130,6 @@ int main(int argc, char *argv[]) {
   struct TrieNode *root = getNode();
   while ((nread = getline(&dict_line, &len, fp2)) != -1) {
     dict_line[strcspn(dict_line, "\n")] = 0;
-    //  printf("%s %d\n", dict_line, nread);
-
     insert(root, dict_line);
   }
 
@@ -136,7 +141,6 @@ int main(int argc, char *argv[]) {
 
     solution_line[strcspn(solution_line, "\n")] = 0;
     int n = strlen(solution_line);
-    // printf("%s %d\n", solution_line, n);
     //  check if it's a valid letter, i.e. present on the board
     for (int i = 0; i < n; i++) {
       if (position_map[solution_line[i] - 'a'] == -1) {
@@ -173,6 +177,13 @@ int main(int argc, char *argv[]) {
     for (int i = 0; i < n; i++) {
       is_char_used[solution_line[i] - 'a'] = true;
     }
+
+    if (did_we_win(position_map, is_char_used) == true) {
+      printf("Correct\n");
+      return 0;
+    }
+
+    free(prev_solution_line);
     prev_solution_line = (char *)malloc(n + 1);
     strcpy(prev_solution_line, solution_line);
     // prev_solution_line = solution_line;
@@ -180,17 +191,13 @@ int main(int argc, char *argv[]) {
 
   /// check all letters are used.
 
-  for (int i = 0; i < 26; i++) {
-    if (position_map[i] == -1)
-      continue;
-
-    if (is_char_used[i] == false) {
-      printf("Not all letters used\n");
-      return 0;
-    }
+  if (did_we_win(position_map, is_char_used) == true) {
+    printf("Correct\n");
+    return 0;
+  } else {
+    printf("Not all letters used\n");
+    return 0;
   }
-
-  printf("Correct\n");
 
   fclose(fp);
   fclose(fp2);
