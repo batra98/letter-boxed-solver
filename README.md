@@ -9,10 +9,13 @@ CS Login: gbatra
 Wisc ID: 9087090024
 Email: gbatra3@wisc.edu
 
+I have completed all the parts of the question.
+
 ## Implementation Details
 
 ### Board
 
+- read input line by line using `getline`.
 - keep a track of the char positions (line number indexed 0) in `int: position_map` and whether a char has been used in `bool: is_char_used` arrays which are of size 26 each.
 - read the board char by char checking for invalid chars and repetitions.
 

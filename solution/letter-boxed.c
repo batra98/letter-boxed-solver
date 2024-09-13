@@ -92,26 +92,55 @@ int main(int argc, char *argv[]) {
   }
 
   int idx = 0;
-  int c;
-  while ((c = fgetc(fp)) != EOF) {
-    if (c == 10) {
-      idx++;
-      continue;
-    }
+  //  int c;
 
-    if (c > 122 || c < 97) {
-      // NOTE: What to do if invalid char?;
-      printf("Invalid board\n");
-      return 1;
-    }
+  char *board_line = NULL;
+  size_t board_line_len = 0;
+  int board_read;
 
-    if (position_map[c - 'a'] == -1)
-      position_map[c - 'a'] = idx;
-    else {
-      printf("Invalid board\n");
-      return 1;
+  while ((board_read = getline(&board_line, &board_line_len, fp)) != -1) {
+    idx++;
+    board_line[strcspn(board_line, "\n")] = 0;
+
+    int n = strlen(board_line);
+
+    for (int i = 0; i < n; i++) {
+      int c = board_line[i];
+
+      if (c > 122 || c < 97) {
+        // NOTE: What to do if invalid char?;
+        printf("Invalid board\n");
+        return 1;
+      }
+
+      if (position_map[c - 'a'] == -1)
+        position_map[c - 'a'] = idx;
+      else {
+        printf("Invalid board\n");
+        return 1;
+      }
     }
   }
+
+  /*  while ((c = fgetc(fp)) != EOF) {
+      if (c == 10) {
+        idx++;
+        continue;
+      }
+
+      if (c > 122 || c < 97) {
+        // NOTE: What to do if invalid char?;
+        printf("Invalid board\n");
+        return 1;
+      }
+
+      if (position_map[c - 'a'] == -1)
+        position_map[c - 'a'] = idx;
+      else {
+        printf("Invalid board\n");
+        return 1;
+      }
+    }*/
 
   if (idx < 3) {
     printf("Invalid board\n");
