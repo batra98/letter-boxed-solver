@@ -1,4 +1,3 @@
-```markdown
 # Letter Boxed Solver
 
 This project is a solution checker for the New York Times puzzle **Letter Boxed**, implemented in **C**. The program validates user inputs against the puzzle rules, ensuring correctness while offering a seamless, command-line-based interface.
