@@ -141,4 +141,3 @@ This project was inspired by **John Shawger**’s original assignment for **CS53
 - Email: [gbatra3@wisc.edu](mailto:gbatra3@wisc.edu)  
 - Wisc ID: 9087090024  
 - CS Login: gbatra  
-```
